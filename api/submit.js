@@ -1,6 +1,6 @@
 // Reçoit l'inscription depuis la page et la transmet au webhook Make.
 const WEBHOOK_URL =
-  process.env.MAKE_WEBHOOK_URL || 'https://hook.eu2.make.com/jcu5dtnquy1o4fxvwtnx7xbttptiri7g';
+  process.env.MAKE_WEBHOOK_URL || 'https://hook.eu1.make.com/j4dhj1u33gf4zp1s1szd9orjstgr2bmi';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
