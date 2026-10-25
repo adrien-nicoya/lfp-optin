@@ -219,7 +219,7 @@ window.CANDIDATURE_URL = 'https://bootcamp.patrimoinesouverain.fr/candidature';
   }
   if (window.CANDIDATURE_URL) {
     document.querySelectorAll('a[href="#candidature"], a[href="#lien-candidature"]').forEach(function(a){
-      var qs = location.search.replace(/^\?/, ''); a.href = window.CANDIDATURE_URL + (qs ? (window.CANDIDATURE_URL.indexOf('?') < 0 ? '?' : '&') + qs : '');
+      var qs = location.search.replace(/^\?/, ''); a.href = window.CANDIDATURE_URL + (qs ? (window.CANDIDATURE_URL.indexOf('?') < 0 ? '?' : '&') + qs : ''); a.target = '_blank'; a.rel = 'noopener';
       a.addEventListener('click', function(){ try { posthog.capture('clic_candidature', { soir: n }); } catch (e) {} });
     });
   }
