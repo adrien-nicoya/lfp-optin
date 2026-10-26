@@ -43,6 +43,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--green2);outline-off
 .dots button[aria-current="true"]{width:28px;background:var(--green2)}
 @media (prefers-reduced-motion: reduce){html,.track{scroll-behavior:auto}.cta{transition:none}}
 @media (max-width:767px){.cta{padding:19px 26px;width:100%;font-size:16px}.arrows{display:none}.chip{font-size:14px}}
+#lfp-player > div,#lfp-player iframe{width:100%!important;height:100%!important;border:0}
 </style>
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties alias get_distinct_id getSessionId getSessionReplayUrl startSessionRecording stopSessionRecording".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -187,8 +188,13 @@ posthog.init('phc_z7PB5LBDVxF2bi38QhWo5Jm8buCioaXqiFt7G9x9ZaFU',{api_host:'https
 </main>
 <script>
 // ====== À RENSEIGNER ======
-// URL d'intégration de chaque replay (YouTube : https://www.youtube.com/embed/ID — Vimeo : https://player.vimeo.com/video/ID)
-window.REPLAY_VIDEOS = { 1: '', 2: '', 3: '', 4: '' };
+// Replays : coller l'URL qui est dans player.setSource("...") du code d'intégration videos.lemanfp.com
+window.REPLAY_VIDEOS = {
+  1: 'https://videos.lemanfp.com?name=2026_10_d3bf608c-ee1b-4200-b2c1-4406cdb6fbb2&autoplay=false&showProgressBar=true&showRemainingTime=false&showFullScreenToggle=true&muted=false&showPlayButton=true&showSpeedRate=true&skipTime=true&scaleThumbnailToFit=false&responsive=true&animationAutoplay=false',
+  2: '',
+  3: '',
+  4: ''
+};
 // Date/heure (Paris) à partir de laquelle chaque replay devient le replay affiché sur /replay
 window.REPLAY_DISPO = ['2026-10-25T23:30:00+01:00', '2026-10-26T23:30:00+01:00', '2026-10-27T23:30:00+01:00', '2026-10-28T23:30:00+01:00'];
 // Lien des boutons "Candidater à l'accompagnement"
@@ -215,7 +221,16 @@ window.CANDIDATURE_URL = 'https://bootcamp.patrimoinesouverain.fr/candidature';
   var vid = (window.REPLAY_VIDEOS || {})[n];
   if (vid) {
     var pl = document.querySelector('[data-video-embed]');
-    pl.innerHTML = '<iframe src="' + vid + '" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Replay du soir ' + n + '"></iframe>';
+    if (vid.indexOf('videos.lemanfp.com') > -1) {
+      // Lecteur LFP (player.js)
+      pl.innerHTML = '<div id="lfp-player" class="pro-video-player" style="position:absolute;inset:0;width:100%;height:100%"></div>';
+      var sc = document.createElement('script');
+      sc.src = 'https://videos.lemanfp.com/player.js';
+      sc.onload = function(){ var p = new Player('lfp-player'); p.setSource(vid); p.generate(); };
+      document.head.appendChild(sc);
+    } else {
+      pl.innerHTML = '<iframe src="' + vid + '" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Replay du soir ' + n + '"></iframe>';
+    }
   }
   if (window.CANDIDATURE_URL) {
     document.querySelectorAll('a[href="#candidature"], a[href="#lien-candidature"]').forEach(function(a){
