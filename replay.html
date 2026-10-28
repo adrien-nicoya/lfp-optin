@@ -214,16 +214,8 @@ window.CANDIDATURE_URL = 'https://bootcamp.patrimoinesouverain.fr/candidature';
   var vid = (window.REPLAY_VIDEOS || {})[n];
   if (vid) {
     var pl = document.querySelector('[data-video-embed]');
-    if (vid.indexOf('videos.lemanfp.com') > -1) {
-      // Lecteur LFP (player.js)
-      pl.innerHTML = '<div id="lfp-player" class="pro-video-player" style="position:absolute;inset:0;width:100%;height:100%"></div>';
-      var sc = document.createElement('script');
-      sc.src = 'https://videos.lemanfp.com/player.js';
-      sc.onload = function(){ var p = new Player('lfp-player'); p.setSource(vid); p.generate(); };
-      document.head.appendChild(sc);
-    } else {
-      pl.innerHTML = '<iframe src="' + vid + '" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Replay du soir ' + n + '"></iframe>';
-    }
+    // Intégration directe en iframe (player.js bloque les domaines non listés chez LFP)
+    pl.innerHTML = '<iframe src="' + vid + '" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Replay du soir ' + n + '"></iframe>';
   }
   if (window.CANDIDATURE_URL) {
     document.querySelectorAll('a[href="#candidature"], a[href="#lien-candidature"]').forEach(function(a){
